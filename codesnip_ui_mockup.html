@@ -1,0 +1,325 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.app{background:var(--color-background-tertiary);min-height:600px;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)}
+.nav{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);padding:0 20px;height:48px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-size:15px;font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px}
+.logo-dot{width:8px;height:8px;background:#639922;border-radius:50%}
+.nav-right{display:flex;align-items:center;gap:8px}
+.nav-btn{font-size:12px;color:var(--color-text-secondary);background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:5px 12px;cursor:pointer}
+.nav-btn.active{background:#EAF3DE;color:#27500A;border-color:#97C459}
+.avatar{width:28px;height:28px;border-radius:50%;background:#EEEDFE;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#3C3489;cursor:pointer}
+.screen{display:none;animation:fadeIn 0.2s ease}
+.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* Landing */
+.landing{padding:48px 32px 32px;text-align:center}
+.landing h1{font-size:28px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px}
+.landing p{font-size:14px;color:var(--color-text-secondary);margin-bottom:24px}
+.search-big{display:flex;align-items:center;gap:8px;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:10px 16px;max-width:520px;margin:0 auto 32px}
+.search-big input{flex:1;border:none;outline:none;font-size:14px;background:transparent;color:var(--color-text-primary)}
+.search-icon{width:16px;height:16px;opacity:0.4}
+.lang-filters{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.lang-pill{font-size:11px;padding:4px 10px;border-radius:999px;border:0.5px solid var(--color-border-tertiary);cursor:pointer;color:var(--color-text-secondary);background:var(--color-background-primary)}
+.lang-pill.sel{background:#EAF3DE;color:#27500A;border-color:#97C459}
+.snippets-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;text-align:left}
+.snip-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;cursor:pointer;transition:border-color 0.15s}
+.snip-card:hover{border-color:var(--color-border-primary)}
+.snip-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.snip-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.lang-badge{font-size:10px;padding:2px 7px;border-radius:999px;background:#EAF3DE;color:#27500A;font-weight:500}
+.lang-badge.ts{background:#E6F1FB;color:#0C447C}
+.lang-badge.py{background:#FAEEDA;color:#633806}
+.lang-badge.go{background:#E1F5EE;color:#085041}
+.lang-badge.rs{background:#FAECE7;color:#712B13}
+.code-preview{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px;font-family:var(--font-mono);font-size:11px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:8px;overflow:hidden;max-height:60px}
+.snip-meta{display:flex;align-items:center;justify-content:space-between}
+.snip-tags{display:flex;gap:4px}
+.tag{font-size:10px;color:var(--color-text-tertiary);background:var(--color-background-secondary);padding:2px 6px;border-radius:4px}
+.snip-stats{font-size:10px;color:var(--color-text-tertiary)}
+
+/* Dashboard */
+.dash-layout{display:flex;height:560px}
+.sidebar{width:200px;background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);padding:16px 12px;flex-shrink:0}
+.sidebar-section{font-size:10px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:0.05em;margin-bottom:8px;padding-left:8px}
+.sb-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:var(--border-radius-md);cursor:pointer;font-size:13px;color:var(--color-text-secondary);margin-bottom:2px}
+.sb-item:hover{background:var(--color-background-secondary)}
+.sb-item.active{background:#EAF3DE;color:#27500A}
+.sb-dot{width:6px;height:6px;border-radius:50%}
+.dash-main{flex:1;padding:20px;overflow-y:auto}
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.dash-title{font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.new-btn{font-size:12px;background:#EAF3DE;color:#27500A;border:0.5px solid #97C459;border-radius:var(--border-radius-md);padding:6px 14px;cursor:pointer}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.stat-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px}
+.stat-label{font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px}
+.stat-val{font-size:20px;font-weight:500;color:var(--color-text-primary)}
+.dash-snip-list{display:flex;flex-direction:column;gap:8px}
+.dash-snip-row{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.dash-snip-row:hover{border-color:var(--color-border-primary)}
+.dsr-info{flex:1}
+.dsr-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.dsr-meta{font-size:11px;color:var(--color-text-tertiary)}
+.dsr-actions{display:flex;gap:6px}
+.icon-btn{width:28px;height:28px;border-radius:var(--border-radius-md);background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px}
+
+/* Snippet view */
+.snip-view{padding:24px}
+.snip-view-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+.snip-view-title{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px}
+.snip-view-meta{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--color-text-secondary)}
+.view-actions{display:flex;gap:8px}
+.act-btn{font-size:12px;padding:6px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);cursor:pointer;background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.act-btn.primary{background:#EAF3DE;color:#27500A;border-color:#97C459}
+.code-block{background:#0d1117;border-radius:var(--border-radius-lg);padding:16px;font-family:var(--font-mono);font-size:12px;line-height:1.7;margin-bottom:16px;overflow-x:auto}
+.code-block .kw{color:#ff7b72}.code-block .fn{color:#d2a8ff}.code-block .str{color:#a5d6ff}.code-block .cm{color:#8b949e}.code-block .num{color:#79c0ff}.code-block .nm{color:#ffa657}
+.embed-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 14px;display:flex;align-items:center;gap:8px}
+.embed-url{font-family:var(--font-mono);font-size:11px;color:var(--color-text-secondary);flex:1}
+
+/* New snippet */
+.new-snip{padding:24px}
+.form-row{margin-bottom:16px}
+.form-label{font-size:12px;color:var(--color-text-secondary);margin-bottom:6px;display:block}
+.form-input{width:100%;padding:8px 12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);font-size:13px;background:var(--color-background-primary);color:var(--color-text-primary);outline:none}
+.form-input:focus{border-color:var(--color-border-secondary)}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.editor-area{background:#0d1117;border-radius:var(--border-radius-lg);padding:16px;font-family:var(--font-mono);font-size:12px;line-height:1.8;color:#c9d1d9;min-height:160px;cursor:text}
+.editor-area .line{display:flex;gap:16px}
+.ln{color:#3d444d;user-select:none;min-width:16px;text-align:right}
+.form-footer{display:flex;align-items:center;justify-content:space-between;margin-top:16px}
+.toggle-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--color-text-secondary)}
+.toggle{width:32px;height:18px;background:#EAF3DE;border-radius:9px;position:relative;cursor:pointer}
+.toggle-knob{width:14px;height:14px;background:#27500A;border-radius:50%;position:absolute;top:2px;left:16px;transition:left 0.15s}
+.form-btns{display:flex;gap:8px}
+</style>
+
+<div class="app">
+  <div class="nav">
+    <div class="nav-logo"><div class="logo-dot"></div>CodeSnip</div>
+    <div class="nav-right">
+      <button class="nav-btn" onclick="show('landing')">Explore</button>
+      <button class="nav-btn" onclick="show('dashboard')">Dashboard</button>
+      <button class="nav-btn" onclick="show('new')">+ New</button>
+      <div class="avatar" title="Profile">AK</div>
+    </div>
+  </div>
+
+  <!-- LANDING / EXPLORE -->
+  <div class="screen active" id="s-landing">
+    <div class="landing">
+      <h1>Find &amp; share code snippets</h1>
+      <p>Search 2,400+ public snippets with full-text search across 40+ languages</p>
+      <div class="search-big">
+        <svg class="search-icon" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.2"/><path d="M10 10l3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        <input type="text" placeholder="Search snippets, languages, tags…" />
+        <span style="font-size:11px;color:var(--color-text-tertiary)">⌘K</span>
+      </div>
+      <div class="lang-filters">
+        <span class="lang-pill sel">All</span>
+        <span class="lang-pill">TypeScript</span>
+        <span class="lang-pill">Python</span>
+        <span class="lang-pill">Go</span>
+        <span class="lang-pill">Rust</span>
+        <span class="lang-pill">SQL</span>
+        <span class="lang-pill">Bash</span>
+      </div>
+      <div class="snippets-grid">
+        <div class="snip-card" onclick="show('view')">
+          <div class="snip-top"><span class="snip-title">Debounce hook</span><span class="lang-badge ts">TS</span></div>
+          <div class="code-preview"><span style="color:#ff7b72">function</span> <span style="color:#d2a8ff">useDebounce</span>&lt;T&gt;(value: T,<br>  delay: <span style="color:#ff7b72">number</span>): T {<br>  <span style="color:#8b949e">// useState + useEffect</span></div>
+          <div class="snip-meta"><div class="snip-tags"><span class="tag">react</span><span class="tag">hooks</span></div><span class="snip-stats">1.2k views</span></div>
+        </div>
+        <div class="snip-card" onclick="show('view')">
+          <div class="snip-top"><span class="snip-title">Fibonacci DP</span><span class="lang-badge py">PY</span></div>
+          <div class="code-preview"><span style="color:#ff7b72">def</span> <span style="color:#d2a8ff">fib</span>(n: <span style="color:#ffa657">int</span>) -&gt; <span style="color:#ffa657">int</span>:<br>  dp = [<span style="color:#79c0ff">0</span>] * (n+<span style="color:#79c0ff">1</span>)<br>  dp[<span style="color:#79c0ff">1</span>] = <span style="color:#79c0ff">1</span></div>
+          <div class="snip-meta"><div class="snip-tags"><span class="tag">dp</span><span class="tag">algo</span></div><span class="snip-stats">876 views</span></div>
+        </div>
+        <div class="snip-card" onclick="show('view')">
+          <div class="snip-top"><span class="snip-title">HTTP middleware</span><span class="lang-badge go">GO</span></div>
+          <div class="code-preview"><span style="color:#ff7b72">func</span> <span style="color:#d2a8ff">Logger</span>(next http.Handler)<br>  http.Handler {<br>  <span style="color:#ff7b72">return</span> http.HandlerFunc(...</div>
+          <div class="snip-meta"><div class="snip-tags"><span class="tag">http</span><span class="tag">middleware</span></div><span class="snip-stats">543 views</span></div>
+        </div>
+        <div class="snip-card" onclick="show('view')">
+          <div class="snip-top"><span class="snip-title">Concurrent map</span><span class="lang-badge rs">RS</span></div>
+          <div class="code-preview"><span style="color:#ff7b72">use</span> std::sync::{Arc, Mutex};<br><span style="color:#ff7b72">let</span> map = Arc::new(<br>  Mutex::new(HashMap::new()));</div>
+          <div class="snip-meta"><div class="snip-tags"><span class="tag">concurrency</span></div><span class="snip-stats">321 views</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="screen" id="s-dashboard">
+    <div class="dash-layout">
+      <div class="sidebar">
+        <div class="sidebar-section">WORKSPACE</div>
+        <div class="sb-item active"><div class="sb-dot" style="background:#639922"></div>All snippets</div>
+        <div class="sb-item"><div class="sb-dot" style="background:#378ADD"></div>Public</div>
+        <div class="sb-item"><div class="sb-dot" style="background:#888780"></div>Private</div>
+        <div style="height:16px"></div>
+        <div class="sidebar-section">TAGS</div>
+        <div class="sb-item"><span style="font-size:11px">#</span>react</div>
+        <div class="sb-item"><span style="font-size:11px">#</span>algorithms</div>
+        <div class="sb-item"><span style="font-size:11px">#</span>database</div>
+        <div class="sb-item"><span style="font-size:11px">#</span>typescript</div>
+      </div>
+      <div class="dash-main">
+        <div class="dash-header">
+          <div class="dash-title">My snippets</div>
+          <button class="new-btn" onclick="show('new')">+ New snippet</button>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-label">Total snippets</div><div class="stat-val">24</div></div>
+          <div class="stat-card"><div class="stat-label">Public</div><div class="stat-val">11</div></div>
+          <div class="stat-card"><div class="stat-label">Total views</div><div class="stat-val">4.1k</div></div>
+        </div>
+        <div class="dash-snip-list">
+          <div class="dash-snip-row" onclick="show('view')">
+            <span class="lang-badge ts" style="font-size:10px;padding:3px 8px">TS</span>
+            <div class="dsr-info"><div class="dsr-title">Debounce hook</div><div class="dsr-meta">Updated 2 days ago · 1,200 views · Public</div></div>
+            <div class="dsr-actions">
+              <div class="icon-btn" title="Edit" onclick="event.stopPropagation();show('new')">✎</div>
+              <div class="icon-btn" title="Copy link">⎘</div>
+            </div>
+          </div>
+          <div class="dash-snip-row" onclick="show('view')">
+            <span class="lang-badge py" style="font-size:10px;padding:3px 8px">PY</span>
+            <div class="dsr-info"><div class="dsr-title">Fibonacci DP</div><div class="dsr-meta">Updated 5 days ago · 876 views · Public</div></div>
+            <div class="dsr-actions">
+              <div class="icon-btn" onclick="event.stopPropagation();show('new')">✎</div>
+              <div class="icon-btn">⎘</div>
+            </div>
+          </div>
+          <div class="dash-snip-row" onclick="show('view')">
+            <span class="lang-badge go" style="font-size:10px;padding:3px 8px">GO</span>
+            <div class="dsr-info"><div class="dsr-title">HTTP middleware chain</div><div class="dsr-meta">Updated 1 week ago · 543 views · Public</div></div>
+            <div class="dsr-actions">
+              <div class="icon-btn" onclick="event.stopPropagation();show('new')">✎</div>
+              <div class="icon-btn">⎘</div>
+            </div>
+          </div>
+          <div class="dash-snip-row">
+            <span class="lang-badge" style="font-size:10px;padding:3px 8px;background:#F1EFE8;color:#5F5E5A">SQL</span>
+            <div class="dsr-info"><div class="dsr-title">Recursive CTE example</div><div class="dsr-meta">Updated 2 weeks ago · Private</div></div>
+            <div class="dsr-actions">
+              <div class="icon-btn" onclick="show('new')">✎</div>
+              <div class="icon-btn">⎘</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SNIPPET VIEW -->
+  <div class="screen" id="s-view">
+    <div class="snip-view">
+      <div class="snip-view-header">
+        <div>
+          <div class="snip-view-title">Debounce hook</div>
+          <div class="snip-view-meta">
+            <span class="lang-badge ts">TypeScript</span>
+            <span>by @aryan_k</span>
+            <span>1,200 views</span>
+            <span style="color:var(--color-text-tertiary)">codesnip.dev/s/abc123</span>
+          </div>
+        </div>
+        <div class="view-actions">
+          <button class="act-btn" onclick="show('new')">Edit</button>
+          <button class="act-btn primary">Copy code</button>
+        </div>
+      </div>
+      <div class="code-block">
+        <div style="color:#8b949e;font-size:11px;margin-bottom:10px;padding-bottom:8px;border-bottom:0.5px solid #21262d">useDebounce.ts</div>
+        <span class="kw">import</span> { useState, useEffect } <span class="kw">from</span> <span class="str">"react"</span>;<br><br>
+        <span class="kw">export function</span> <span class="fn">useDebounce</span>&lt;T&gt;(<br>
+        &nbsp;&nbsp;value: T,<br>
+        &nbsp;&nbsp;delay: <span class="kw">number</span> = <span class="num">300</span><br>
+        ): T {<br>
+        &nbsp;&nbsp;<span class="kw">const</span> [debouncedValue, setDebouncedValue] = <span class="fn">useState</span>&lt;T&gt;(value);<br><br>
+        &nbsp;&nbsp;<span class="fn">useEffect</span>(() =&gt; {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">const</span> timer = <span class="fn">setTimeout</span>(() =&gt; {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">setDebouncedValue</span>(value);<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;}, delay);<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> () =&gt; <span class="fn">clearTimeout</span>(timer);<br>
+        &nbsp;&nbsp;}, [value, delay]);<br><br>
+        &nbsp;&nbsp;<span class="kw">return</span> debouncedValue;<br>
+        }
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:14px">
+        <span class="tag">react</span><span class="tag">hooks</span><span class="tag">typescript</span><span class="tag">performance</span>
+      </div>
+      <div class="embed-box">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="opacity:0.4"><path d="M5 3L2 8l3 5M11 3l3 5-3 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <span class="embed-url">https://codesnip.dev/api/embed/abc123</span>
+        <button class="act-btn" style="padding:4px 10px;font-size:11px">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEW SNIPPET -->
+  <div class="screen" id="s-new">
+    <div class="new-snip">
+      <div style="font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:18px">New snippet</div>
+      <div class="form-row">
+        <label class="form-label">Title</label>
+        <input class="form-input" type="text" placeholder="e.g. Debounce hook" value="Debounce hook" />
+      </div>
+      <div class="form-row-2">
+        <div>
+          <label class="form-label">Language</label>
+          <select class="form-input" style="cursor:pointer">
+            <option>TypeScript</option><option>JavaScript</option><option>Python</option><option>Go</option><option>Rust</option><option>SQL</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Tags</label>
+          <input class="form-input" type="text" placeholder="react, hooks, performance" value="react, hooks" />
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Code</label>
+        <div class="editor-area">
+          <div class="line"><span class="ln">1</span><span><span style="color:#ff7b72">import</span> { useState, useEffect } <span style="color:#ff7b72">from</span> <span style="color:#a5d6ff">"react"</span>;</span></div>
+          <div class="line"><span class="ln">2</span><span></span></div>
+          <div class="line"><span class="ln">3</span><span><span style="color:#ff7b72">export function</span> <span style="color:#d2a8ff">useDebounce</span>&lt;T&gt;(value: T, delay: <span style="color:#ff7b72">number</span> = <span style="color:#79c0ff">300</span>): T {</span></div>
+          <div class="line"><span class="ln">4</span><span>&nbsp;&nbsp;<span style="color:#ff7b72">const</span> [debouncedValue, setDebouncedValue] = <span style="color:#d2a8ff">useState</span>&lt;T&gt;(value);</span></div>
+          <div class="line"><span class="ln">5</span><span>&nbsp;&nbsp;<span style="color:#d2a8ff">useEffect</span>(() =&gt; {</span></div>
+          <div class="line"><span class="ln">6</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#8b949e">// ... timer logic</span></span></div>
+          <div class="line"><span class="ln">7</span><span>&nbsp;&nbsp;}, [value, delay]);</span></div>
+          <div class="line"><span class="ln">8</span><span>&nbsp;&nbsp;<span style="color:#ff7b72">return</span> debouncedValue;</span></div>
+          <div class="line"><span class="ln">9</span><span>}</span></div>
+        </div>
+      </div>
+      <div class="form-footer">
+        <div class="toggle-row">
+          <div class="toggle"><div class="toggle-knob"></div></div>
+          Make public
+        </div>
+        <div class="form-btns">
+          <button class="act-btn" onclick="show('dashboard')">Cancel</button>
+          <button class="act-btn primary" onclick="show('dashboard')">Save snippet</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+  <button onclick="show('landing')" style="font-size:12px;padding:6px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);cursor:pointer;color:var(--color-text-secondary)">Explore page</button>
+  <button onclick="show('dashboard')" style="font-size:12px;padding:6px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);cursor:pointer;color:var(--color-text-secondary)">Dashboard</button>
+  <button onclick="show('view')" style="font-size:12px;padding:6px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);cursor:pointer;color:var(--color-text-secondary)">Snippet view</button>
+  <button onclick="show('new')" style="font-size:12px;padding:6px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);cursor:pointer;color:var(--color-text-secondary)">New snippet</button>
+</div>
+
+<script>
+function show(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('s-' + name).classList.add('active');
+}
+document.querySelectorAll('.snip-card, .dash-snip-row').forEach(el => {
+  el.addEventListener('click', function() { show('view'); });
+});
+</script>
