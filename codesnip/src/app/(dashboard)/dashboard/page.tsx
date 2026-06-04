@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { type CSSProperties } from "react";
 
 import { Sidebar } from "~/components/layout/Sidebar";
@@ -7,6 +8,11 @@ import { api } from "~/trpc/server";
 
 export default async function DashboardPage() {
   const session = await auth();
+
+  if (!session?.user) {
+    redirect("/login");
+  }
+
   const [{ items }, userTags] = await Promise.all([
     api.snippets.getByUser({ limit: 20 }),
     api.tags.getByUser(),

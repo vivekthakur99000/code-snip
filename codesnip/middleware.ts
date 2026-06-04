@@ -7,13 +7,14 @@ const SESSION_COOKIE_NAMES = [
   "__Secure-next-auth.session-token",
 ] as const;
 
-const hasSessionCookie = (req: NextRequest) =>
-  SESSION_COOKIE_NAMES.some((name) => Boolean(req.cookies.get(name)?.value));
+const hasSessionCookie = (req: NextRequest): boolean => {
+  return SESSION_COOKIE_NAMES.some((name) => Boolean(req.cookies.get(name)?.value));
+};
 
 export default function middleware(req: NextRequest) {
   if (!hasSessionCookie(req)) {
     const loginUrl = new URL("/login", req.nextUrl.origin);
-    loginUrl.searchParams.set("next", req.nextUrl.pathname);
+    loginUrl.searchParams.set("next", `${req.nextUrl.pathname}${req.nextUrl.search}`);
     return NextResponse.redirect(loginUrl);
   }
 
